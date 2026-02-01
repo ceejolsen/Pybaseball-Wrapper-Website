@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baseball Player Statistics Lookup</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #FFFFFF; /* MLB scheme: white */
+      color: #333333; /* MLB scheme: dark gray for body text */
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .container {
+      background-color: #002D62; /* MLB scheme: Dark Blue */
+      color: #FFFFFF; /* Default white text color for elements inside container */
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+      width: 90%;
+      max-width: 650px;
+      margin-top: 20px;
+    }
+
+    h1,
+    h2 {
+      color: #D50032; /* MLB scheme: Red */
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      font-size: 2em;
+    }
+
+    h2 {
+      font-size: 1.6em;
+      margin-top: 0;
+    }
+
+    label {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      display: block;
+      color: #f0f0f0;
+      text-align: left;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 25px;
+      border-radius: 6px;
+      border: 1px solid #CED4DA; /* Light gray border */
+      font-size: 1em;
+      background-color: #FFFFFF; /* White background for inputs */
+      color: #333333; /* Dark text for inputs */
+      box-sizing: border-box;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+      border-color: #D50032; /* MLB Red focus */
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(213, 0, 50, 0.25); /* MLB Red shadow */
+    }
+
+    .button {
+      padding: 12px 25px;
+      font-size: 1.1em;
+      color: #FFFFFF; /* White text on button */
+      background-color: #D50032; /* MLB Red background */
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: bold;
+      display: inline-block;
+      width: auto;
+    }
+
+    .button:hover {
+      background-color: #A70028; /* Darker MLB Red on hover */
+      transform: translateY(-1px);
+    }
+
+    .button:active {
+      transform: translateY(0px);
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+    }
+
+    .player-select-section {
+      margin-top: 30px;
+      border-top: 1px solid #FFFFFF; /* White/light border on dark blue */
+      padding-top: 30px;
+    }
+
+    .no-data-message {
+      margin-top: 20px;
+      color: #FFFFFF; /* White text */
+      background-color: rgba(213, 0, 50, 0.15); /* Subtle red tint background */
+      border: 1px solid #D50032; /* MLB Red border */
+      padding: 15px;
+      border-radius: 5px;
+      font-size: 1.1em;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    .player-options-submit-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .checkbox-item label {
+      font-size: 0.95em;
+      color: #f0f0f0;
+      margin-bottom: 0;
+      cursor: pointer;
+      text-align: left;
+      /* Added for tooltip positioning context */
+      position: relative;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: auto;
+      margin-bottom: 0;
+      accent-color: #D50032; /* MLB Red accent for checkbox */
+      cursor: pointer;
+    }
+
+    .submit-button-container {
+      margin-left: auto;
+    }
+
+    /* --- Tooltip Styles --- */
+    [data-tooltip] {
+      position: relative; /* Context for the tooltip pseudo-element */
+      /* cursor: help; /* Optional: change cursor to indicate an informative element */
+    }
+
+    [data-tooltip]::after {
+      content: attr(data-tooltip); /* Display text from data-tooltip attribute */
+      position: absolute;
+      width: max-content; /* Adjust width to content */
+      max-width: 220px; /* Max width of the tooltip */
+      left: 50%;
+      transform: translateX(-50%); /* Center the tooltip */
+      bottom: 130%; /* Position above the element. Adjust as needed. */
+      padding: 6px 10px;
+      border-radius: 5px;
+      background-color: #424242; /* Dark background for tooltip */
+      color: #fff; /* Light text for tooltip */
+      font-size: 0.875em; /* Slightly smaller font for tooltip */
+      text-align: center;
+      visibility: hidden; /* Hidden by default */
+      opacity: 0;
+      transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+      z-index: 1000; /* Ensure tooltip is above other elements */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      white-space: normal; /* Allow text to wrap */
+    }
+    
+    /* Optional: small arrow for the tooltip */
+    [data-tooltip]::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(130% - 5px); /* Position arrow just below the tooltip box */
+      border-width: 5px;
+      border-style: solid;
+      border-color: #424242 transparent transparent transparent; /* Arrow pointing up, same color as tooltip bg */
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+      z-index: 1001; /* Above the tooltip box background */
+    }
+
+    /* Show tooltip on hover */
+    [data-tooltip]:hover::after,
+    [data-tooltip]:hover::before {
+      visibility: visible;
+      opacity: 1;
+    }
+    /* --- End Tooltip Styles --- */
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Baseball Player Lookup</h1>
+    <p style="margin-top:-15px; margin-bottom:25px; font-size:1.1em;">Data for {{ year }} season</p>
+
+    <div class="form-section">
+      <form method="POST" action="{{ url_for('home') }}">
+        <label for="min_pa">Minimum Plate Appearances (PAs):</label>
+        <input type="number" id="min_pa" name="min_pa" ... placeholder="Enter minimum PAs (e.g., 50). Leave blank for qualified hitters." >
+        <button type="submit" class="button">Filter Players</button>
+      </form>
+    </div>
+
+    {% if players is not none %}
+    <div class="player-select-section">
+      {% if players %}
+      <h2>Select a Player & Options</h2>
+      <form action="{{ url_for('player_info') }}" method="POST">
+        <label for="player_select">Filtered Players ({{ players|length }} found):</label>
+        <select name="player_idfg" id="player_select" required>
+          <option value="" disabled selected>-- Select a Player --</option>
+          {% for player in players %}
+          <option value="{{ player.IDfg }}">{{ player.Name }} (Team: {{ player.Team }} PA: {{ player.PA }})</option>
+          {% endfor %}
+        </select>
+
+        <div class="player-options-submit-group">
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <input type="checkbox" id="show_advanced_stats" name="show_advanced_stats">
+              <label for="show_advanced_stats" data-tooltip="Displays advanced metrics like fWAR, BsR, oWar, & dWar.">Show Advanced Stats</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="show_detailed_stats" name="show_detailed_stats">
+              <label for="show_detailed_stats" data-tooltip="Shows additional batting stats like BB%, K%, ISO, & BABIP.">Show Detailed Stats</label>
+            </div>
+          </div>
+          <div class="submit-button-container">
+            <button type="submit" class="button">Get Player Info</button>
+          </div>
+        </div>
+      </form>
+      {% else %}
+      <p class="no-data-message">No players found matching {{ current_min_pa if current_min_pa is not none else 'the specified' }} PAs for {{ year }} or previous years. Please try a different PA value.</p>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</body>
+
+</html>
