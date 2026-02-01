@@ -39,4 +39,4 @@ Any setup instructions or limitations:
 - The `min_pa` filter on the home page, if left blank, will fetch data for "qualified" hitters, which is 3.1 PAs per team game played.
 
 For a brief explanation of relevant baseball terminology for this document: 
-PA refers to Plate Appearances, which is the number of times a batter comes to the plate, no matter the outcomes. In order to be a qualified hitter, a player must have 3.1 PAs for every 1 game their team has played, for instance, if a team has played 100 games each qualified hitter on their team must have at least 310 PAs.
+PA refers to Plate Appearances, which is the number of times a batter comes to the plate, no matter the outcome. In order to be a qualified hitter, a player must have 3.1 PAs for every 1 game their team has played, for instance, if a team has played 100 games each qualified hitter on their team must have at least 310 PAs.
